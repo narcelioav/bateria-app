@@ -49,24 +49,57 @@ export default App
 */
 
 import { useState, useEffect } from "react"
-import alerta from "./assets/alerta.mp3"
+import alerta20 from "./assets/alerta20.mp3"
+import alerta10 from "./assets/alerta10.mp3"
+import alerta5 from "./assets/alerta5.mp3"
 
 function App() {
   const [nivel, setNivel] = useState(100)
-  const [limite] = useState(20)
+  const [limite, setLimite] = useState(20)
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (nivel <= limite && nivel > 0) {
       const audio = new Audio(alerta)
       audio.play()
     }
-  }, [nivel, limite])
+  }, [nivel, limite])*/
+
+  useEffect(() => {
+    if (nivel === 20) {
+      new Audio(alerta20).play()
+    }
+    if (nivel === 10) {
+      new Audio(alerta10).play()
+    }
+    if (nivel === 5) {
+      new Audio(alerta5).play()
+    }
+  }, [nivel])
 
   return (
-    <div>
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+
       <h1>🔋 {nivel}%</h1>
 
-      {nivel === 20 && <p>⚠️ Bateria baixa!</p>}
+      <div style={{
+        width: "200px",
+        border: "2px solid black",
+        padding: "5px",
+        margin: "0 auto"
+      }}>
+        <div style={{
+          height: "20px",
+          width: `${nivel}%`,
+          //backgroundColor: nivel > 20 ? "green" : "red"
+          backgroundColor:
+            nivel > 20 ? "green" :
+              nivel > 10 ? "yellow" :
+                "red"
+        }} />
+      </div>
+
+      {nivel === 20 && nivel > 0 && (<p>⚠️ Bateria baixa!</p>)}
+      {nivel === 15 && nivel > 0 && (<p>⚠️ Bateria baixa!</p>)}
 
       <button
         /*onClick={() => {
@@ -77,12 +110,32 @@ function App() {
         onClick={() =>
           setNivel((valorAnterior) => {
             if (valorAnterior <= 0) return 0
-            return valorAnterior - 10
+            return valorAnterior - 5
           })
         }
-          >
-          Consumir bateria
+      >
+        Consumir bateria
       </button>
+
+      { /*Carregar bateria*/}
+      <button
+        onClick={() =>
+          setNivel((valorAnterior) => {
+            if (valorAnterior >= 100) return 100
+            return valorAnterior + 5
+          })
+        }
+      >
+        Carregar bateria
+      </button>
+
+      {/*Permitir mudar limite dinamicamente*/}
+      <br /><br />
+      <input
+        type="number"
+        value={limite}
+        onChange={(e) => setLimite(Number(e.target.value))}
+      />
     </div >
   )
 }
