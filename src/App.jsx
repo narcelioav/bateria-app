@@ -64,6 +64,7 @@ function App() {
     }
   }, [nivel, limite])*/
 
+  {/*adiciona alertas sonoros*/ }
   useEffect(() => {
     if (nivel === 20) {
       new Audio(alerta20).play()
