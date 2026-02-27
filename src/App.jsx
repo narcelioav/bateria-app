@@ -80,6 +80,7 @@ function App() {
   }, [nivel])*/
 
   useEffect(() => {
+    // Se entrou na zona crítica
     if (nivel <= limite && nivel > 0) {
       if (!audioRef.current) {
         audioRef.current = new Audio(alerta20)
@@ -87,86 +88,117 @@ function App() {
         audioRef.current.play()
       }
     } else {
+      // Se saiu da zona crítica, para o som
       if (audioRef.current) {
         audioRef.current.pause()
         audioRef.current.currentTime = 0
         audioRef.current = null
       }
     }
+
+    // Cleanup automático (boa prática)
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
+      }
+    }
+
   }, [nivel, limite])
 
   return (
     /*<div style={{ textAlign: "center", marginTop: "50px" }}>*/
-    <div className="container">
+    /*<div className="container">*/
+    <div className="phone">
+      <div className="screen">
 
-      <h1>🔋 {nivel}%</h1>
+        <h1>🔋 {nivel}%</h1>
 
-      {/*<div style={{
+        {/*<div style={{
         width: "200px",
         border: "2px solid black",
         padding: "5px",
         margin: "0 auto"
       }}>*/}
-      <div className="barra-externa">
-        <div className="barra-interna"
-          style={{
-            height: "20px",
-            width: `${nivel}%`,
-            //backgroundColor: nivel > 20 ? "green" : "red"
-            backgroundColor:
-              nivel > 20 ? "green" :
-                nivel > 10 ? "yellow" :
-                  "red"
-          }} />
-      </div>
+        <div className="barra-externa">
+          <div className="barra-interna"
+            style={{
+              height: "20px",
+              width: `${nivel}%`,
 
-      {nivel === 20 && nivel > 0 && (<p>⚠️ Bateria baixa!</p>)}
-      {nivel === 15 && nivel > 0 && (<p>⚠️ Bateria baixa!</p>)}
+              //Barra usando limite dinâmico
+              //backgroundColor: nivel > 20 ? "green" : "red"
 
-      { /*Botão descarregar bateria*/}
-      <button
-        /*onClick={() => {
-          if (nivel > 0) {
-            setNivel(nivel - 10)
+              /*backgroundColor:
+                nivel > 20 ? "green" :
+                  nivel > 10 ? "yellow" :
+                    "red"*/
+
+              backgroundColor:
+                nivel > limite ? "green" :
+                  nivel > limite / 2 ? "yellow" :
+                    "red"
+
+            }} />
+        </div>
+
+        {nivel === 20 && nivel > 0 && (<p>⚠️ Bateria baixa!</p>)}
+        {nivel === 15 && nivel > 0 && (<p>⚠️ Bateria baixa!</p>)}
+
+        { /*Botão descarregar bateria*/}
+        <button
+          /*onClick={() => {
+            if (nivel > 0) {
+              setNivel(nivel - 10)
+            }
+          }}*/
+
+          /*onClick={() =>
+            setNivel((valorAnterior) => {
+              if (valorAnterior <= 0) return 0
+              return valorAnterior - 5
+            })*/
+
+          onClick={() =>
+            setNivel((v) => v <= 0 ? 0 : v - 5)
           }
-        }}*/
+        >
+          Consumir bateria
+        </button>
 
-        /*onClick={() =>
-          setNivel((valorAnterior) => {
-            if (valorAnterior <= 0) return 0
-            return valorAnterior - 5
-          })*/
+        { /*Carregar bateria*/}
+        <button
+          /*onClick={() =>
+            setNivel((valorAnterior) => {
+              if (valorAnterior >= 100) return 100
+              return valorAnterior + 5
+            })*/
 
-        onClick={() =>
-          setNivel((v) => v <= 0 ? 0 : v - 5)
-        }
-      >
-        Consumir bateria
-      </button>
+          onClick={() =>
+            setNivel((v) => v >= 100 ? 100 : v + 5)
+          }
+        >
+          Carregar bateria
+        </button>
 
-      { /*Carregar bateria*/}
-      <button
-        /*onClick={() =>
-          setNivel((valorAnterior) => {
-            if (valorAnterior >= 100) return 100
-            return valorAnterior + 5
-          })*/
-
-        onClick={() =>
-          setNivel((v) => v >= 100 ? 100 : v + 5)
-        }
-      >
-        Carregar bateria
-      </button>
-
-      {/*Permitir mudar limite dinamicamente
-      Aparece apenas a barra*/}
-      <br /><br />
-      <input
+        {/*Permitir mudar limite configurável*/}
+        <br /><br />
+        {/*<input
         type="number"
         value={limite}
         onChange={(e) => setLimite(Number(e.target.value))}
-      />
+      />*/}
+
+        <p>Limite de alerta: {limite}%</p>
+
+        <input
+          type="range"
+          min="5"
+          max="50"
+          value={limite}
+          onChange={(e) => setLimite(Number(e.target.value))}
+        />
+      </div >
     </div >
   )
 }
