@@ -130,7 +130,8 @@ function App() {
         Carregar bateria
       </button>
 
-      {/*Permitir mudar limite dinamicamente*/}
+      {/*Permitir mudar limite dinamicamente
+      Aparece apenas a barra*/}
       <br /><br />
       <input
         type="number"
