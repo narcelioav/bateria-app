@@ -52,6 +52,7 @@ import { useState, useEffect } from "react"
 import alerta20 from "./assets/alerta20.mp3"
 import alerta10 from "./assets/alerta10.mp3"
 import alerta5 from "./assets/alerta5.mp3"
+import "./App.css"
 
 function App() {
   const [nivel, setNivel] = useState(100)
@@ -78,25 +79,28 @@ function App() {
   }, [nivel])
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
+    /*<div style={{ textAlign: "center", marginTop: "50px" }}>*/
+    <div className="container">
 
       <h1>🔋 {nivel}%</h1>
 
-      <div style={{
+      {/*<div style={{
         width: "200px",
         border: "2px solid black",
         padding: "5px",
         margin: "0 auto"
-      }}>
-        <div style={{
-          height: "20px",
-          width: `${nivel}%`,
-          //backgroundColor: nivel > 20 ? "green" : "red"
-          backgroundColor:
-            nivel > 20 ? "green" :
-              nivel > 10 ? "yellow" :
-                "red"
-        }} />
+      }}>*/}
+      <div className="barra-externa">
+        <div className="barra-interna"
+          style={{
+            height: "20px",
+            width: `${nivel}%`,
+            //backgroundColor: nivel > 20 ? "green" : "red"
+            backgroundColor:
+              nivel > 20 ? "green" :
+                nivel > 10 ? "yellow" :
+                  "red"
+          }} />
       </div>
 
       {nivel === 20 && nivel > 0 && (<p>⚠️ Bateria baixa!</p>)}
@@ -109,11 +113,15 @@ function App() {
             setNivel(nivel - 10)
           }
         }}*/
-        onClick={() =>
+
+        /*onClick={() =>
           setNivel((valorAnterior) => {
             if (valorAnterior <= 0) return 0
             return valorAnterior - 5
-          })
+          })*/
+
+        onClick={() =>
+          setNivel((v) => v <= 0 ? 0 : v - 5)
         }
       >
         Consumir bateria
@@ -121,11 +129,14 @@ function App() {
 
       { /*Carregar bateria*/}
       <button
-        onClick={() =>
+        /*onClick={() =>
           setNivel((valorAnterior) => {
             if (valorAnterior >= 100) return 100
             return valorAnterior + 5
-          })
+          })*/
+
+        onClick={() =>
+          setNivel((v) => v >= 100 ? 100 : v + 5)
         }
       >
         Carregar bateria
