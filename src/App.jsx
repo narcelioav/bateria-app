@@ -48,7 +48,7 @@ function App() {
 export default App
 */
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import alerta20 from "./assets/alerta20.mp3"
 import alerta10 from "./assets/alerta10.mp3"
 import alerta5 from "./assets/alerta5.mp3"
@@ -57,6 +57,7 @@ import "./App.css"
 function App() {
   const [nivel, setNivel] = useState(100)
   const [limite, setLimite] = useState(20)
+  const audioRef = useRef(null)
 
   /*useEffect(() => {
     if (nivel <= limite && nivel > 0) {
@@ -66,7 +67,7 @@ function App() {
   }, [nivel, limite])*/
 
   {/*adiciona alertas sonoros*/ }
-  useEffect(() => {
+  /*useEffect(() => {
     if (nivel === 20) {
       new Audio(alerta20).play()
     }
@@ -76,7 +77,23 @@ function App() {
     if (nivel === 5) {
       new Audio(alerta5).play()
     }
-  }, [nivel])
+  }, [nivel])*/
+
+  useEffect(() => {
+    if (nivel <= limite && nivel > 0) {
+      if (!audioRef.current) {
+        audioRef.current = new Audio(alerta20)
+        audioRef.current.loop = true
+        audioRef.current.play()
+      }
+    } else {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
+        audioRef.current = null
+      }
+    }
+  }, [nivel, limite])
 
   return (
     /*<div style={{ textAlign: "center", marginTop: "50px" }}>*/
