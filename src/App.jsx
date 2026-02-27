@@ -101,6 +101,7 @@ function App() {
       {nivel === 20 && nivel > 0 && (<p>⚠️ Bateria baixa!</p>)}
       {nivel === 15 && nivel > 0 && (<p>⚠️ Bateria baixa!</p>)}
 
+      { /*Botão descarregar bateria*/}
       <button
         /*onClick={() => {
           if (nivel > 0) {
